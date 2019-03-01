@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Photo" representedClassName="Photo" syncable="YES">
+        <attribute name="earth_date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="img_src" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="sonda" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sonda" inverseName="photos" inverseEntity="Sonda" syncable="YES"/>
+    </entity>
+    <entity name="Sonda" representedClassName="Sonda" syncable="YES">
+        <attribute name="sondaName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="sonda" inverseEntity="Photo" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Photo" positionX="-64.15234375" positionY="15.53125" width="128" height="90"/>
+        <element name="Sonda" positionX="-326.15234375" positionY="28.01953125" width="128" height="73"/>
+    </elements>
+</model>

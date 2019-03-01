@@ -7,23 +7,43 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A16F44F221C407A00F8F779 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A16F44E221C407A00F8F779 /* Constants.swift */; };
+		6A3EC5EE22199BD600C98570 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3EC5ED22199BD600C98570 /* Client.swift */; };
+		6A3EC5F022199CD100C98570 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3EC5EF22199CD100C98570 /* DataController.swift */; };
+		6A42741F222411B400671AD4 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42741E222411B400671AD4 /* PhotosViewController.swift */; };
 		6A48DCE02218AF0B008CA75C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A48DCDF2218AF0B008CA75C /* AppDelegate.swift */; };
-		6A48DCE22218AF0B008CA75C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A48DCE12218AF0B008CA75C /* ViewController.swift */; };
+		6A48DCE22218AF0B008CA75C /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A48DCE12218AF0B008CA75C /* HomeViewController.swift */; };
 		6A48DCE52218AF0B008CA75C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A48DCE32218AF0B008CA75C /* Main.storyboard */; };
 		6A48DCE82218AF0B008CA75C /* Nasa_App.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6A48DCE62218AF0B008CA75C /* Nasa_App.xcdatamodeld */; };
 		6A48DCEA2218AF10008CA75C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A48DCE92218AF10008CA75C /* Assets.xcassets */; };
 		6A48DCED2218AF10008CA75C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A48DCEB2218AF10008CA75C /* LaunchScreen.storyboard */; };
+		6A518559222181AB0043B341 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A518558222181AB0043B341 /* Photo.swift */; };
+		6A51855B222181CE0043B341 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A51855A222181CE0043B341 /* Photo+CoreDataProperties.swift */; };
+		6A51855D222181E60043B341 /* PhotoParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A51855C222181E60043B341 /* PhotoParser.swift */; };
+		6A51855F222182180043B341 /* Sonda.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A51855E222182180043B341 /* Sonda.swift */; };
+		6A518561222182320043B341 /* Sonda+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A518560222182320043B341 /* Sonda+CoreDataProperties.swift */; };
+		6AA5D814222828280065F377 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA5D813222828280065F377 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A16F44E221C407A00F8F779 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		6A3EC5ED22199BD600C98570 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		6A3EC5EF22199CD100C98570 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		6A42741E222411B400671AD4 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		6A48DCDC2218AF0B008CA75C /* Nasa App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Nasa App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A48DCDF2218AF0B008CA75C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6A48DCE12218AF0B008CA75C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6A48DCE12218AF0B008CA75C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		6A48DCE42218AF0B008CA75C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6A48DCE72218AF0B008CA75C /* Nasa_App.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nasa_App.xcdatamodel; sourceTree = "<group>"; };
 		6A48DCE92218AF10008CA75C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6A48DCEC2218AF10008CA75C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A48DCEE2218AF10008CA75C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6A518558222181AB0043B341 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		6A51855A222181CE0043B341 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6A51855C222181E60043B341 /* PhotoParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoParser.swift; sourceTree = "<group>"; };
+		6A51855E222182180043B341 /* Sonda.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sonda.swift; sourceTree = "<group>"; };
+		6A518560222182320043B341 /* Sonda+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sonda+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6AA5D813222828280065F377 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +57,53 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A16F44D221C406B00F8F779 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				6A16F44E221C407A00F8F779 /* Constants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		6A3EC5E52219907E00C98570 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6A48DCE12218AF0B008CA75C /* HomeViewController.swift */,
+				6A42741E222411B400671AD4 /* PhotosViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		6A3EC5E62219908900C98570 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6A518558222181AB0043B341 /* Photo.swift */,
+				6A51855A222181CE0043B341 /* Photo+CoreDataProperties.swift */,
+				6A51855C222181E60043B341 /* PhotoParser.swift */,
+				6A51855E222182180043B341 /* Sonda.swift */,
+				6A518560222182320043B341 /* Sonda+CoreDataProperties.swift */,
+				6A48DCE62218AF0B008CA75C /* Nasa_App.xcdatamodeld */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6A3EC5E72219908F00C98570 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6A48DCE32218AF0B008CA75C /* Main.storyboard */,
+				6A48DCEB2218AF10008CA75C /* LaunchScreen.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6A3EC5EC22199BC000C98570 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				6A3EC5ED22199BD600C98570 /* Client.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		6A48DCD32218AF0B008CA75C = {
 			isa = PBXGroup;
 			children = (
@@ -56,15 +123,26 @@
 		6A48DCDE2218AF0B008CA75C /* Nasa App */ = {
 			isa = PBXGroup;
 			children = (
+				6AA5D812222828110065F377 /* Extensions */,
+				6A16F44D221C406B00F8F779 /* Constants */,
+				6A3EC5EC22199BC000C98570 /* Network */,
+				6A3EC5E72219908F00C98570 /* View */,
+				6A3EC5E62219908900C98570 /* Model */,
+				6A3EC5E52219907E00C98570 /* ViewController */,
 				6A48DCDF2218AF0B008CA75C /* AppDelegate.swift */,
-				6A48DCE12218AF0B008CA75C /* ViewController.swift */,
-				6A48DCE32218AF0B008CA75C /* Main.storyboard */,
 				6A48DCE92218AF10008CA75C /* Assets.xcassets */,
-				6A48DCEB2218AF10008CA75C /* LaunchScreen.storyboard */,
 				6A48DCEE2218AF10008CA75C /* Info.plist */,
-				6A48DCE62218AF0B008CA75C /* Nasa_App.xcdatamodeld */,
+				6A3EC5EF22199CD100C98570 /* DataController.swift */,
 			);
 			path = "Nasa App";
+			sourceTree = "<group>";
+		};
+		6AA5D812222828110065F377 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6AA5D813222828280065F377 /* Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,8 +216,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A518559222181AB0043B341 /* Photo.swift in Sources */,
+				6A518561222182320043B341 /* Sonda+CoreDataProperties.swift in Sources */,
+				6A16F44F221C407A00F8F779 /* Constants.swift in Sources */,
+				6A51855D222181E60043B341 /* PhotoParser.swift in Sources */,
+				6A51855F222182180043B341 /* Sonda.swift in Sources */,
+				6A3EC5F022199CD100C98570 /* DataController.swift in Sources */,
 				6A48DCE82218AF0B008CA75C /* Nasa_App.xcdatamodeld in Sources */,
-				6A48DCE22218AF0B008CA75C /* ViewController.swift in Sources */,
+				6A48DCE22218AF0B008CA75C /* HomeViewController.swift in Sources */,
+				6AA5D814222828280065F377 /* Extensions.swift in Sources */,
+				6A3EC5EE22199BD600C98570 /* Client.swift in Sources */,
+				6A42741F222411B400671AD4 /* PhotosViewController.swift in Sources */,
+				6A51855B222181CE0043B341 /* Photo+CoreDataProperties.swift in Sources */,
 				6A48DCE02218AF0B008CA75C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
