@@ -11,6 +11,7 @@
 		6A3EC5EE22199BD600C98570 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3EC5ED22199BD600C98570 /* Client.swift */; };
 		6A3EC5F022199CD100C98570 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3EC5EF22199CD100C98570 /* DataController.swift */; };
 		6A42741F222411B400671AD4 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42741E222411B400671AD4 /* PhotosViewController.swift */; };
+		6A44E0812229714D00E07443 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A44E0802229714D00E07443 /* Functions.swift */; };
 		6A48DCE02218AF0B008CA75C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A48DCDF2218AF0B008CA75C /* AppDelegate.swift */; };
 		6A48DCE22218AF0B008CA75C /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A48DCE12218AF0B008CA75C /* HomeViewController.swift */; };
 		6A48DCE52218AF0B008CA75C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A48DCE32218AF0B008CA75C /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 		6A3EC5ED22199BD600C98570 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		6A3EC5EF22199CD100C98570 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		6A42741E222411B400671AD4 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
+		6A44E0802229714D00E07443 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		6A48DCDC2218AF0B008CA75C /* Nasa App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Nasa App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A48DCDF2218AF0B008CA75C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A48DCE12218AF0B008CA75C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +106,14 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
+		6A44E07F2229712700E07443 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				6A44E0802229714D00E07443 /* Functions.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		6A48DCD32218AF0B008CA75C = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +133,7 @@
 		6A48DCDE2218AF0B008CA75C /* Nasa App */ = {
 			isa = PBXGroup;
 			children = (
+				6A44E07F2229712700E07443 /* Services */,
 				6AA5D812222828110065F377 /* Extensions */,
 				6A16F44D221C406B00F8F779 /* Constants */,
 				6A3EC5EC22199BC000C98570 /* Network */,
@@ -219,6 +230,7 @@
 				6A518559222181AB0043B341 /* Photo.swift in Sources */,
 				6A518561222182320043B341 /* Sonda+CoreDataProperties.swift in Sources */,
 				6A16F44F221C407A00F8F779 /* Constants.swift in Sources */,
+				6A44E0812229714D00E07443 /* Functions.swift in Sources */,
 				6A51855D222181E60043B341 /* PhotoParser.swift in Sources */,
 				6A51855F222182180043B341 /* Sonda.swift in Sources */,
 				6A3EC5F022199CD100C98570 /* DataController.swift in Sources */,

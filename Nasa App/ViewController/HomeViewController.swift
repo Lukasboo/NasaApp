@@ -149,36 +149,40 @@ class HomeViewController: UIViewController {
             }
     }
 
-    func getPictures(date: Date) {        
-        Client.sharedInstance().getData(sonda: self.sondaStr, date: date) { (success, error) in
-            if error == nil {
-                if (success?.photos.count)! > 0 {
-                    DispatchQueue.main.sync {
-                        self.photoStatusLabel.isHidden = true
-                    }
-                    if self.sondaStr.elementsEqual("curiosity") {
-                        self.curiosity = success
-                    } else if self.sondaStr == "opportunity" {
-                        self.dateIndex = 0
-                        self.opportunity = success
-                    } else if self.sondaStr == "spirit" {
-                        self.spirit = success
-                    }
-                    DispatchQueue.main.sync {
-                        self.photoCollectionView.reloadData()
+    func getPictures(date: Date) {
+        if Functions.isInternetAvailable() {
+            Client.sharedInstance().getData(sonda: self.sondaStr, date: date) { (success, error) in
+                if error == nil {
+                    if (success?.photos.count)! > 0 {
+                        DispatchQueue.main.sync {
+                            self.photoStatusLabel.isHidden = true
+                        }
+                        if self.sondaStr.elementsEqual("curiosity") {
+                            self.curiosity = success
+                        } else if self.sondaStr == "opportunity" {
+                            self.dateIndex = 0
+                            self.opportunity = success
+                        } else if self.sondaStr == "spirit" {
+                            self.spirit = success
+                        }
+                        DispatchQueue.main.sync {
+                            self.photoCollectionView.reloadData()
+                        }
+                    } else {
+                        DispatchQueue.main.sync {
+                            self.photoStatusLabel.isHidden = false
+                            self.photoCollectionView.reloadData()
+                        }
                     }
                 } else {
                     DispatchQueue.main.sync {
-                        self.photoStatusLabel.isHidden = false
                         self.photoCollectionView.reloadData()
+                        self.showInfo(withTitle: "Error", withMessage: "Error while get pictures: \(error)")
                     }
                 }
-            } else {
-                DispatchQueue.main.sync {
-                    self.photoCollectionView.reloadData()
-                    self.showInfo(withTitle: "Error", withMessage: "Error while get pictures: \(error)")
-                }
             }
+        } else {
+            showInfo(withMessage: "Sem conexão com a Internet!")
         }
     }
     
