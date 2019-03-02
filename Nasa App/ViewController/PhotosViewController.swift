@@ -55,6 +55,7 @@ class PhotosViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if let sondas = loadAllSondas() {
             setupSondas(sonda: sondas)
             setupPhotos()
@@ -160,8 +161,8 @@ class PhotosViewController: UIViewController {
         var error: NSError?
         do {
             try fetchedResultsController.performFetch()
-        } catch let error1 as NSError {
-            error = error1
+        } catch let errorTemp as NSError {
+            error = errorTemp
         }
         
         if let error = error {
@@ -175,7 +176,7 @@ class PhotosViewController: UIViewController {
         let dateFormatterPrint = DateFormatter()
         dateFormatterPrint.dateFormat = "dd/MM/yyyy"
         let date: Date? = dateFormatterGet.date(from: date)
-        let dateStr = dateFormatterPrint.string(from: date!)        
+        let dateStr = dateFormatterPrint.string(from: date!)
         return dateStr
     }
 

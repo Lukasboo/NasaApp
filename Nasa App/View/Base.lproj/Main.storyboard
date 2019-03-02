@@ -71,11 +71,11 @@
                                 </connections>
                             </segmentedControl>
                             <view hidden="YES" alpha="0.5" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5m8-zo-CHi">
-                                <rect key="frame" x="0.0" y="0.0" width="30" height="667"/>
+                                <rect key="frame" x="72" y="0.0" width="14" height="667"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <datePicker hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Rct-8f-veL">
-                                <rect key="frame" x="0.0" y="333.5" width="375" height="333.5"/>
+                            <datePicker hidden="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Rct-8f-veL">
+                                <rect key="frame" x="151" y="342" width="124" height="325"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <date key="date" timeIntervalSinceReferenceDate="572359835.50421906">
                                     <!--2019-02-20 12:50:35 +0000-->
@@ -95,8 +95,8 @@
                                     <action selector="chooseDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Lhu-sO-qKf"/>
                                 </connections>
                             </button>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nenhuma foto para mostrar neste dia" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tci-lG-jm3">
-                                <rect key="frame" x="22.5" y="329.5" width="330" height="23"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nenhuma foto para mostrar neste dia" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="Tci-lG-jm3">
+                                <rect key="frame" x="8" y="329.5" width="359" height="23"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="19"/>
                                 <color key="textColor" red="1" green="0.058155415100000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -106,9 +106,9 @@
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ecn-zF-gVQ" secondAttribute="bottom" constant="8" id="03C-R3-Fnl"/>
                             <constraint firstItem="5m8-zo-CHi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="0rn-Lx-jkV"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Tci-lG-jm3" secondAttribute="trailing" constant="8" id="62K-TN-Vcs"/>
                             <constraint firstAttribute="trailing" secondItem="5m8-zo-CHi" secondAttribute="trailing" id="CNT-I0-bZT"/>
                             <constraint firstItem="3Bf-Cb-NS2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="DsP-lW-aOT"/>
-                            <constraint firstItem="Tci-lG-jm3" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="GDr-rv-Ute"/>
                             <constraint firstItem="Rct-8f-veL" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="LU1-ck-Ohd"/>
                             <constraint firstItem="Rct-8f-veL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="NNI-jC-Yh0"/>
                             <constraint firstAttribute="bottom" secondItem="5m8-zo-CHi" secondAttribute="bottom" id="OyI-fW-2Hd"/>
@@ -122,6 +122,7 @@
                             <constraint firstItem="Tci-lG-jm3" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="qaG-Cm-gjO"/>
                             <constraint firstItem="5m8-zo-CHi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="saL-IT-6jc"/>
                             <constraint firstItem="3Bf-Cb-NS2" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.94" id="umP-6a-hF9"/>
+                            <constraint firstItem="Tci-lG-jm3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="uwZ-ht-V39"/>
                             <constraint firstItem="Rct-8f-veL" firstAttribute="height" secondItem="5m8-zo-CHi" secondAttribute="height" multiplier="0.5" id="w5a-3A-4z0"/>
                             <constraint firstItem="ZB5-Za-PYs" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.04" id="yRR-oe-uii"/>
                             <constraint firstItem="Ecn-zF-gVQ" firstAttribute="centerX" secondItem="3Bf-Cb-NS2" secondAttribute="centerX" id="yhN-9t-JmX"/>
