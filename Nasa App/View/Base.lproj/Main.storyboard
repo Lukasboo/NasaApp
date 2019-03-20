@@ -58,6 +58,10 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="Jn5-f9-QWe"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="4zw-6A-X2p"/>
+                                </connections>
                             </collectionView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="3Bf-Cb-NS2">
                                 <rect key="frame" x="11.5" y="98.5" width="352.5" height="29"/>
@@ -225,6 +229,10 @@
                                         <outlet property="sectionHeaderlabel" destination="zGB-yn-Sqh" id="GrT-lg-8JS"/>
                                     </connections>
                                 </collectionReusableView>
+                                <connections>
+                                    <outlet property="dataSource" destination="UiL-N8-I2p" id="rgA-Sv-d70"/>
+                                    <outlet property="delegate" destination="UiL-N8-I2p" id="oK9-Gv-XaA"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

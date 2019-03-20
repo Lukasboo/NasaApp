@@ -36,16 +36,15 @@ class PhotosViewController: UIViewController {
     var deletedIndexPaths: [IndexPath]!
     var updatedIndexPaths: [IndexPath]!
     
-    let dataController = DataController(modelName: "Nasa_App")
+    var stack = CoreDataStack.shared
+    
+    let handleSonda = HandleSonda()
+    let handlePhoto = HandlePhoto()
     
     @IBOutlet weak var favoritesPhotosCollectionView: UICollectionView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.favoritesPhotosCollectionView.delegate = self
-        self.favoritesPhotosCollectionView.dataSource = self
-        self.dataController.load()
         
         if let sondas = loadAllSondas() {
             setupSondas(sonda: sondas)
@@ -62,43 +61,6 @@ class PhotosViewController: UIViewController {
         }
     }
     
-    func setupSondas(sonda: [Sonda]) {
-        sondaCuriosity = sonda[0]
-        sondaOpportunity = sonda[2]
-        sondaSpirit = sonda[4]
-    }
-
-    func setupPhotos() {
-        self.photosCuriosity = nil
-        self.photosCuriosity = nil 
-        self.photosSpirit = nil
-        self.photosCuriosity = self.loadPhotos(using: self.sondaCuriosity!)
-        self.photosOpportunity = self.loadPhotos(using: self.sondaOpportunity!)
-        self.photosSpirit = self.loadPhotos(using: self.sondaSpirit!)
-        self.favoritesPhotosCollectionView.reloadData()
-    }
-    
-    func loadPhotos(using sonda: Sonda) -> [Photo]? {
-         let predicate = NSPredicate(format: "sonda == %@", argumentArray: [sonda])
-         var photos: [Photo]?
-         do {
-            try photos = dataController.fetchPhotos(predicate, entityName: Photo.name, sorting: nil)
-         } catch {
-            showInfo(withTitle: "Error", withMessage: "Error while loading Photos from disk: \(error)")
-         }
-         return photos
-     }
-    
-    func loadAllSondas() -> [Sonda]? {
-        var sondas: [Sonda]?
-        do {
-            try sondas = dataController.fetchAllSondas(entityName: Sonda.name)
-        } catch {
-            showInfo(withTitle: "Error", withMessage: "Error while fetching Pin locations: \(error)")
-        }
-        return sondas
-    }
-
     func showAlert(indexPath: IndexPath) {
         let alertController = UIAlertController(title: "Deletar", message: "Deseja realmente deletar essa foto?", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {
@@ -117,45 +79,12 @@ class PhotosViewController: UIViewController {
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
     }
-
-    func deletePhoto(indexPath: IndexPath) {
-        
-        if indexPath.section == 0 {
-            self.setupFetchedResultControllerWith(sondaCuriosity!)
-        } else if indexPath.section == 1 {
-            self.setupFetchedResultControllerWith(sondaOpportunity!)
-        } else if indexPath.section == 2 {
-            self.setupFetchedResultControllerWith(sondaSpirit!)
-        }
-        
-        let tempIndexPath: IndexPath = IndexPath(row: indexPath.row, section: 0)
-        
-        let photoToDelete = self.fetchedResultsController.object(at: tempIndexPath)
-        self.dataController.viewContext.delete(photoToDelete)
-        
-        
-        if indexPath.section == 0 {
-            self.setupFetchedResultControllerWith(sondaCuriosity!)
-        } else if indexPath.section == 1 {
-            self.setupFetchedResultControllerWith(sondaOpportunity!)
-        } else if indexPath.section == 2 {
-            self.setupFetchedResultControllerWith(sondaSpirit!)
-        }
-        
-        do {
-            try dataController.viewContext.save()
-        } catch {
-            showInfo(withTitle: "Error", withMessage: "Error while save context: \(error)")
-        }
-   
-    }
     
     private func setupFetchedResultControllerWith(_ sonda: Sonda) {
-        
         let fr = NSFetchRequest<Photo>(entityName: Photo.name)
         fr.sortDescriptors = []
         fr.predicate = NSPredicate(format: "sonda == %@", argumentArray: [sonda])
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
         
         var error: NSError?
@@ -169,17 +98,85 @@ class PhotosViewController: UIViewController {
             print("\(#function) Error performing initial fetch: \(error)")
         }
     }
-    
-    func setupDate(date: String) -> String {
-        let dateFormatterGet = DateFormatter()
-        dateFormatterGet.dateFormat = "yyyy-MM-dd"
-        let dateFormatterPrint = DateFormatter()
-        dateFormatterPrint.dateFormat = "dd/MM/yyyy"
-        let date: Date? = dateFormatterGet.date(from: date)
-        let dateStr = dateFormatterPrint.string(from: date!)
-        return dateStr
-    }
+        
+}
 
+//Sonda
+extension PhotosViewController {
+    
+    func setupSondas(sonda: [Sonda]) {
+        sondaCuriosity = sonda[0]
+        sondaOpportunity = sonda[2]
+        sondaSpirit = sonda[4]
+    }
+    
+    func loadAllSondas() -> [Sonda]? {
+        var sondas: [Sonda]?
+        do {
+            try sondas = handleSonda.fetchAllSondas(entityName: Sonda.name, viewContext: stack.viewContext)
+        } catch {
+            showInfo(withTitle: "Error", withMessage: "Error while fetching Pin locations: \(error)")
+        }
+        return sondas
+    }
+    
+}
+
+extension PhotosViewController {
+    
+    func setupPhotos() {
+        self.photosCuriosity = nil
+        self.photosCuriosity = nil
+        self.photosSpirit = nil
+        self.photosCuriosity = self.loadPhotos(using: self.sondaCuriosity!)
+        self.photosOpportunity = self.loadPhotos(using: self.sondaOpportunity!)
+        self.photosSpirit = self.loadPhotos(using: self.sondaSpirit!)
+        self.favoritesPhotosCollectionView.reloadData()
+    }
+    
+    func loadPhotos(using sonda: Sonda) -> [Photo]? {
+        let predicate = NSPredicate(format: "sonda == %@", argumentArray: [sonda])
+        var photos: [Photo]?
+        do {
+            try photos = handlePhoto.fetchPhotos(predicate, entityName: Photo.name, sorting: nil, viewContext: stack.viewContext)
+        } catch {
+            showInfo(withTitle: "Error", withMessage: "Error while loading Photos from disk: \(error)")
+        }
+        return photos
+    }
+    
+    func deletePhoto(indexPath: IndexPath) {
+        
+        if indexPath.section == 0 {
+            self.setupFetchedResultControllerWith(sondaCuriosity!)
+        } else if indexPath.section == 1 {
+            self.setupFetchedResultControllerWith(sondaOpportunity!)
+        } else if indexPath.section == 2 {
+            self.setupFetchedResultControllerWith(sondaSpirit!)
+        }
+        
+        let tempIndexPath: IndexPath = IndexPath(row: indexPath.row, section: 0)
+        
+        let photoToDelete = self.fetchedResultsController.object(at: tempIndexPath)
+        self.stack.viewContext.delete(photoToDelete)
+        
+        
+        if indexPath.section == 0 {
+            self.setupFetchedResultControllerWith(sondaCuriosity!)
+        } else if indexPath.section == 1 {
+            self.setupFetchedResultControllerWith(sondaOpportunity!)
+        } else if indexPath.section == 2 {
+            self.setupFetchedResultControllerWith(sondaSpirit!)
+        }
+        
+        do {
+            try stack.viewContext.save()
+        } catch {
+            showInfo(withTitle: "Error", withMessage: "Error while save context: \(error)")
+        }
+        
+    }
+    
 }
 
 extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -193,8 +190,7 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-      print(section)
-       if section == 0 {
+        if section == 0 {
             if !(photosCuriosity?.isEmpty)! {
                 return (photosCuriosity?.count)!
             }
@@ -218,15 +214,21 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
         
         var imageUrlString: String = ""
         cell.photoImageView.tag = indexPath.item
-        if section == 0 {            
+        if section == 0 {
             imageUrlString = (photosCuriosity?[indexPath.item].img_src)!
-            cell.photoDate.text = setupDate(date: (photosCuriosity?[indexPath.item].earth_date)!)
+            if let date = dateToString(dateToConvert: (photosCuriosity?[indexPath.item].earth_date)!, actualFormat: "yyyy-MM-dd", newFormat: "dd/MM/yyyy") {
+                cell.photoDate.text = date
+            }
         } else if section == 1 {
             imageUrlString = (photosOpportunity?[indexPath.item].img_src)!
-            cell.photoDate.text = setupDate(date: (photosOpportunity?[indexPath.item].earth_date)!)
+            if let date = dateToString(dateToConvert: (photosOpportunity?[indexPath.item].earth_date)!, actualFormat: "yyyy-MM-dd", newFormat: "dd/MM/yyyy") {
+                cell.photoDate.text = date
+            }
         } else if section == 2 {
             imageUrlString = (photosSpirit?[indexPath.item].img_src)!
-            cell.photoDate.text = setupDate(date: (photosSpirit?[indexPath.item].earth_date)!)
+            if let date = dateToString(dateToConvert: (photosSpirit?[indexPath.item].earth_date)!, actualFormat: "yyyy-MM-dd", newFormat: "dd/MM/yyyy") {
+                cell.photoDate.text = date
+            }
         }
         
         let imageUrl: URL = URL(string: imageUrlString)!
@@ -307,3 +309,4 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate {
     }
     
 }
+

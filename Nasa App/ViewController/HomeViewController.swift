@@ -40,26 +40,23 @@ class HomeViewController: UIViewController {
     var deletedIndexPaths: [IndexPath]!
     var updatedIndexPaths: [IndexPath]!
     
+    var stack = CoreDataStack.shared
     var fetchedResultsController: NSFetchedResultsController<Photo>!
     private var tasks: [String: URLSessionDataTask] = [:]
     
-    let dataController = DataController(modelName: "Nasa_App")
-        
+    let handleSonda = HandleSonda()
+    
     @IBOutlet weak var photoCollectionView: UICollectionView!
     @IBOutlet weak var dateButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var photoStatusLabel: UILabel!
-    
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.datePicker.tintColor = UIColor.white
         self.datePicker.setValue(UIColor.white, forKeyPath: "textColor")
-        self.photoCollectionView.delegate = self
-        self.photoCollectionView.dataSource = self
-        
-        dataController.load()
-        
+                        
         if let sondas = loadAllSondas() {
             if sondas.count == 0 {
                 saveSondas()
@@ -69,88 +66,8 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func setupFetchedResultControllerWith(_ sonda: Sonda) {
-        let fr = NSFetchRequest<Photo>(entityName: Photo.name)
-        fr.sortDescriptors = []
-        fr.predicate = NSPredicate(format: "sonda == %@", argumentArray: [sonda])
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController.delegate = self
-        
-        var error: NSError?
-        do {
-            try fetchedResultsController.performFetch()
-        } catch let error1 as NSError {
-            error = error1
-        }
-        
-        if let error = error {
-            print("\(#function) Error performing initial fetch: \(error)")
-        }
-    }
-    
-    func setupSondas(sonda: [Sonda]) {
-        sondaCuriosity = sonda[0]
-        sondaOpportunity = sonda[2]
-        sondaSpirit = sonda[4]
-    }
-    
-    private func loadPhotos(using sonda: Sonda) -> [Photo]? {
-        let predicate = NSPredicate(format: "sonda == %@", argumentArray: [sonda])
-        var photos: [Photo]?
-        do {
-            try photos = dataController.fetchPhotos(predicate, entityName: Photo.name, sorting: nil)
-        } catch {
-            showInfo(withTitle: "Error", withMessage: "Error while loading Photos from disk: \(error)")
-        }
-        return photos
-    }
-    
-    private func loadAllSondas() -> [Sonda]? {
-        var sondas: [Sonda]?
-        do {
-            try sondas = dataController.fetchAllSondas(entityName: Sonda.name)
-        } catch {
-            showInfo(withTitle: "Error", withMessage: "Error while fetching Pin locations: \(error)")
-        }
-        return sondas
-    }
-    
-    func saveSondas() {
-        
-        let sondasStrArray = ["Curiosity", "Opportunity", "Spirit"]
-        
-        for sonda in sondasStrArray {
-            let sondaTemp = Sonda(context: dataController.viewContext)
-            sondaTemp.sondaName = sonda
-            _ = Sonda(sondaName: sondaTemp.sondaName!, context: dataController.viewContext)
-            
-            do {
-                try dataController.viewContext.save()
-            } catch {
-                print("Erro")
-            }
-        }
-        
-        if let sonda = loadAllSondas() {
-            setupSondas(sonda: sonda)
-        }
-    }
-    
-    func savePhoto(earth_date: String, img_src: String, forSonda: Sonda) {
-        func showErrorMessage(msg: String) {
-            showInfo(withTitle: "Error", withMessage: msg)
-        }
-        
-        _ = Photo(earth_date: earth_date, img_src: img_src, forSonda: forSonda, context: dataController.viewContext)
-            do {
-                try dataController.viewContext.save()
-            } catch {
-                showInfo(withTitle: "Error", withMessage: "Error while store photos: \(error)")
-            }
-    }
-
     func getPictures(date: Date) {
-        if Functions.isInternetAvailable() {
+        if isInternetAvailable() {
             Client.sharedInstance().getData(sonda: self.sondaStr, date: date) { (success, error) in
                 if error == nil {
                     if (success?.photos.count)! > 0 {
@@ -186,6 +103,35 @@ class HomeViewController: UIViewController {
         }
     }
     
+    func showAlert(_ collectionView: UICollectionView, indexPath: IndexPath, imageURL: String) {
+        let alertController = UIAlertController(title: "Salvar", message: "Deseja realmente salvar essa foto?", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {
+            UIAlertAction in
+            
+            var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PhotoCollectionCell
+            cell.activityIndicator.isHidden = false
+            cell.activityIndicator.startAnimating()
+            cell.photoImageView.isHidden = true
+            
+            let photoViewCell = cell as! PhotoCollectionCell
+            
+            if self.sondaStr.elementsEqual("curiosity"){
+                self.savePhoto(earth_date: (self.curiosity?.photos[indexPath.item].earth_date)! , img_src: (self.curiosity?.photos[indexPath.item].img_src)!, forSonda: self.sondaCuriosity!)
+            } else if self.sondaStr.elementsEqual("opportunity") {
+                self.savePhoto(earth_date: (self.opportunity?.photos[indexPath.item].earth_date)! , img_src: (self.opportunity?.photos[indexPath.item].img_src)!, forSonda: self.sondaOpportunity!)
+            } else if self.sondaStr.elementsEqual("spirit") {
+                self.savePhoto(earth_date: (self.spirit?.photos[indexPath.item].earth_date)! , img_src: (self.spirit?.photos[indexPath.item].img_src)!, forSonda: self.sondaSpirit!)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) {
+            UIAlertAction in
+            NSLog("Cancel Pressed")
+        }
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     @IBAction func changeSonda(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
             sondaStr = "curiosity"
@@ -198,13 +144,16 @@ class HomeViewController: UIViewController {
             spirit = nil
         }
         
-        getPictures(date: setupDate())
+        if let date = stringToDate(dateToConvert: (self.dateButton.titleLabel?.text!)!, actualFormat: "dd/MM/yyyy", newFormat: "yyyy-MM-dd") {
+            getPictures(date: date)
+        }
+        
     }
     
     @IBAction func changeDate(_ sender: UIDatePicker) {
         var dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
-        var selectedDate = dateFormatter.string(from: sender.date)        
+        var selectedDate = dateFormatter.string(from: sender.date)
         self.dateButton.setTitle(selectedDate, for: .normal)
     }
     
@@ -218,19 +167,12 @@ class HomeViewController: UIViewController {
         } else if self.sondaStr == "spirit" {
             self.spirit = nil
         }
-        getPictures(date: setupDate())
+        
+        if let date = stringToDate(dateToConvert: (self.dateButton.titleLabel?.text!)!, actualFormat: "dd/MM/yyyy", newFormat: "yyyy-MM-dd") {
+            getPictures(date: date)
+        }
     }
     
-    func setupDate() -> Date {
-        let dateFormatterGet = DateFormatter()
-        dateFormatterGet.dateFormat = "dd/MM/yyyy"
-        let dateFormatterPrint = DateFormatter()
-        dateFormatterPrint.dateFormat = "yyyy-MM-dd"
-        let date: Date? = dateFormatterGet.date(from: (self.dateButton.titleLabel?.text)!)
-        let dateStr = dateFormatterPrint.string(from: date!)
-        let dateFinal: Date? = dateFormatterPrint.date(from: dateStr)
-        return dateFinal!
-    }
     
     @IBAction func chooseDate(_ sender: UIButton) {
         shadowView.isHidden = false
@@ -238,9 +180,68 @@ class HomeViewController: UIViewController {
         photoStatusLabel.isHidden = true
     }
     
-}
-
-extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+ }
+ 
+ //Sonda
+ extension HomeViewController {
+    
+    func setupSondas(sonda: [Sonda]) {
+        sondaCuriosity = sonda[0]
+        sondaOpportunity = sonda[2]
+        sondaSpirit = sonda[4]
+    }
+    
+    private func loadAllSondas() -> [Sonda]? {
+        var sondas: [Sonda]?
+        do {
+            try sondas = handleSonda.fetchAllSondas(entityName: Sonda.name, viewContext: stack.viewContext)
+        } catch {
+            showInfo(withTitle: "Error", withMessage: "Error while fetching Pin locations: \(error)")
+        }
+        return sondas
+    }
+    
+    func saveSondas() {
+        let sondasStrArray = ["Curiosity", "Opportunity", "Spirit"]        
+        for sonda in sondasStrArray {
+            let sondaTemp = Sonda(context: stack.viewContext)
+            sondaTemp.sondaName = sonda
+            _ = Sonda(sondaName: sondaTemp.sondaName!, context: stack.viewContext)
+            
+            do {
+                try stack.viewContext.save()
+            } catch {
+                showInfo(withMessage: "Erro ao salvar sonda!")
+            }
+        }
+        
+        if let sonda = loadAllSondas() {
+            setupSondas(sonda: sonda)
+        }
+    }
+    
+ }
+ 
+ //Photos
+ extension HomeViewController {
+    
+    func savePhoto(earth_date: String, img_src: String, forSonda: Sonda) {
+        func showErrorMessage(msg: String) {
+            showInfo(withTitle: "Error", withMessage: msg)
+        }
+        
+        _ = Photo(earth_date: earth_date, img_src: img_src, forSonda: forSonda, context: stack.viewContext)
+        do {
+            try stack.viewContext.save()
+        } catch {
+            showInfo(withTitle: "Error", withMessage: "Error while store photos: \(error)")
+        }
+    }
+    
+    
+ }
+ 
+ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: Screen.screenWidth*44/100, height: Screen.screenWidth*44/100)
@@ -310,39 +311,10 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             
         }
     }
+   
     
-    func showAlert(_ collectionView: UICollectionView, indexPath: IndexPath, imageURL: String) {
-        let alertController = UIAlertController(title: "Salvar", message: "Deseja realmente salvar essa foto?", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {
-            UIAlertAction in
-            
-            var cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PhotoCollectionCell
-            cell.activityIndicator.isHidden = false
-            cell.activityIndicator.startAnimating()
-            cell.photoImageView.isHidden = true
-            
-            let photoViewCell = cell as! PhotoCollectionCell
-            
-            if self.sondaStr.elementsEqual("curiosity"){
-                self.savePhoto(earth_date: (self.curiosity?.photos[indexPath.item].earth_date)! , img_src: (self.curiosity?.photos[indexPath.item].img_src)!, forSonda: self.sondaCuriosity!)
-            } else if self.sondaStr.elementsEqual("opportunity") {
-                self.savePhoto(earth_date: (self.opportunity?.photos[indexPath.item].earth_date)! , img_src: (self.opportunity?.photos[indexPath.item].img_src)!, forSonda: self.sondaOpportunity!)
-            } else if self.sondaStr.elementsEqual("spirit") {
-                self.savePhoto(earth_date: (self.spirit?.photos[indexPath.item].earth_date)! , img_src: (self.spirit?.photos[indexPath.item].img_src)!, forSonda: self.sondaSpirit!)
-            }
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) {
-            UIAlertAction in
-            NSLog("Cancel Pressed")
-        }
-        alertController.addAction(okAction)
-        alertController.addAction(cancelAction)
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
-    
-}
-
+ }
+ 
  extension HomeViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -392,5 +364,6 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             
         }, completion: nil)
     }
-    
  }
+ 
+ 

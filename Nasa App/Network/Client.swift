@@ -17,8 +17,12 @@ class Client : NSObject {
     }
     
     func getData(sonda: String, date: Date, result: @escaping (_ result: PhotosParser?, _ error: NSError?) -> Void) -> URLSessionDataTask {
-        
-        let request = NSMutableURLRequest(url: URL(string: "https://api.nasa.gov/mars-photos/api/v1/rovers/" + sonda + "/photos?earth_date=" + getYesterdayDateString(starterDate: date) + "&api_key=U7YRh9sYiU7BH9xyg06bcZEYxeIJCNuIUrIMbYV5")!)
+               
+        let parameters: [String: String] = [
+            "earth_date": getYesterdayDateString(starterDate: date),
+            "api_key": Constants.apiKey
+        ]
+        let request = NSMutableURLRequest(url: buildURLFromParameters(sonda: sonda, parameters, withPathExtension: "\(sonda)/photos"))
         
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -37,7 +41,6 @@ class Client : NSObject {
             }
             
             if let code = response as? HTTPURLResponse {
-                print(code.statusCode)
                 if code.statusCode == 429 {
                     sendError("limit")
                     return
@@ -61,27 +64,13 @@ class Client : NSObject {
             } catch {
                 sendError("Ocorreu um erro. Tente mais tarde novamente!")
             }
+            
         }
         
         task.resume()
         return task
     }
-    
-    private func convertDataWithCompletionHandler(_ data: Data, completionHandlerForConvertData: (_ result: AnyObject?, _ error: NSError?) -> Void) {
         
-        var parsedResult: AnyObject! = nil
-        do {
-            parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
-        } catch {
-            let userInfo = [NSLocalizedDescriptionKey : "Could not parse the data as JSON: '\(data)'"]
-            completionHandlerForConvertData(nil, NSError(domain: "convertDataWithCompletionHandler", code: 1, userInfo: userInfo))
-        }
-        print(parsedResult!)
-        
-        completionHandlerForConvertData(parsedResult!, nil)
-        
-    }
-    
     class func sharedInstance() -> Client {
         struct Singleton {
             static var sharedInstance = Client()
@@ -92,12 +81,24 @@ class Client : NSObject {
     func getYesterdayDateString(starterDate: Date) -> String {
         let date = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
+        dateFormatter.dateFormat = "yyyy-MM-dd"        
         if let date = dateFormatter.date(from: dateFormatter.string(from: starterDate)) {
-            print(dateFormatter.string(from: date))
             return(dateFormatter.string(from: date))
         }
         return ""
-    }    
+    }
+    
+    private func buildURLFromParameters(sonda: String, _ parameters: [String: String], withPathExtension: String? = nil) -> URL {
+        var components = URLComponents()
+        components.scheme = Constants.APIScheme
+        components.host = Constants.APIHost
+        components.path = Constants.APIPath + (withPathExtension ?? "")
+        components.queryItems = [URLQueryItem]()
+        
+        for (key, value) in parameters {
+            let queryItem = URLQueryItem(name: key, value: value)
+            components.queryItems!.append(queryItem)
+        }
+        return components.url!
+    }
 }

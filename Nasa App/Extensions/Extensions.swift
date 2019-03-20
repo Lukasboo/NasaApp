@@ -8,6 +8,7 @@
 
 import UIKit
 import SystemConfiguration
+import CoreData
 
 extension UIViewController {
     
@@ -16,7 +17,7 @@ extension UIViewController {
     }
     
     func showInfo(withTitle: String = "Info", withMessage: String, action: (() -> Void)? = nil) {
-        performUIUpdatesOnMain {
+        DispatchQueue.main.async {
             let ac = UIAlertController(title: withTitle, message: withMessage, preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default, handler: {(alertAction) in
                 action?()
@@ -25,13 +26,7 @@ extension UIViewController {
         }
     }
     
-    func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
-        DispatchQueue.main.async {
-            updates()
-        }
-    }
-    
-    static func isInternetAvailable() -> Bool {
+    func isInternetAvailable() -> Bool {
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
         zeroAddress.sin_family = sa_family_t(AF_INET)
@@ -50,6 +45,28 @@ extension UIViewController {
         let needsConnection = flags.contains(.connectionRequired)
         return (isReachable && !needsConnection)
     }
+    
+    func dateToString(dateToConvert: String, actualFormat: String, newFormat: String) -> String? {
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = actualFormat
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = newFormat
+        let date: Date? = dateFormatterGet.date(from: dateToConvert)
+        let dateStr = dateFormatterPrint.string(from: date!)
+        return dateStr
+    }
+    
+    func stringToDate(dateToConvert: String, actualFormat: String, newFormat: String) -> Date? {
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = actualFormat
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = newFormat
+        let date: Date? = dateFormatterGet.date(from: dateToConvert)
+        let dateStr = dateFormatterPrint.string(from: date!)
+        let dateFinal: Date? = dateFormatterPrint.date(from: dateStr)
+        return dateFinal!
+    }
 }
+    
 
 
